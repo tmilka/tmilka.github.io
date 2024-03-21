@@ -41,7 +41,7 @@ nav a:hover {
 }
 
 .project-box {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha value (0.8) to change transparency */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 20px;

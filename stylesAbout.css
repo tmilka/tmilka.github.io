@@ -39,7 +39,7 @@ nav a:hover {
 }
 
 .topic-box {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha value (0.8) to change transparency */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 5px auto;
@@ -49,11 +49,11 @@ nav a:hover {
 }
 
 .topic-box h2 {
-    color: #333;
+    color: black;
 }
 
 .topic-box p {
-    color: #666;
+    color: #333;
 }
 
 .topic-box ul {
