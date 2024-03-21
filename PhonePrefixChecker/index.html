@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Phone prefix checker</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: bold;
+            font-size: large;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="userInput">Enter phone prefix:</label>
+    <input type="text" id="userInput" onkeydown="searchOnEnter(event)">
+    <button onclick="searchValue()">Search</button>
+
+    <p>Result: <span id="output"></span></p>
+
+    <script>
+        // Enable to press "enter" to search
+        function searchOnEnter(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+
+                // Trigger a click on the search button
+                searchValue();
+            }
+        }
+
+        function searchValue() {
+
+            const userInput = document.getElementById("userInput").value;
+
+            fetch('https://raw.githubusercontent.com/tmilka/file-storage/main/PhonePrefix.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse JSON response
+                })
+                .then(data => {
+
+                    const inputVorwahl = userInput;
+                    const PLZ = searchPLZByPhonePrefix(inputVorwahl, data);
+
+                    if (PLZ !== "Phone prefix not found") {
+                        console.log(`PLZ for phone prefix ${inputVorwahl}: ${PLZ}`);
+                    } else {
+                        console.log(`Phone prefix not found ${inputVorwahl}`);
+                        document.getElementById("output").textContent = `Phone prefix not found ${inputVorwahl}`;
+                        return
+                    }
+
+                    fetch('https://raw.githubusercontent.com/tmilka/file-storage/main/FederalState.json')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json(); // Parse JSON response
+                        })
+                        .then(data => {
+
+                            const FederalState = searchFederalStateByPLZ(PLZ, data);
+
+                            if (FederalState !== "PLZ not found") {
+                                console.log(`Federal state name ${FederalState}`);
+                            } else {
+                                console.log(`Federal state not found for ${PLZ}`);
+                                document.getElementById("output").textContent =
+                                    `Federal state not found for ${PLZ}`;
+                                return
+                            }
+
+                            fetch('https://raw.githubusercontent.com/tmilka/file-storage/main/CountryCode.json')
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json(); // Parse JSON response
+                                })
+                                .then(data => {
+
+                                    const CountryCode = searchCountryCodeByFederalState(FederalState, data);
+
+                                    if (CountryCode !== "Federal state not found") {
+                                        console.log(`Country code:  ${CountryCode}`);
+
+                                        document.getElementById("output").textContent = CountryCode;
+                                    } else {
+                                        console.log(`Country code not found!`);
+                                        document.getElementById("output").textContent =
+                                            `Country code not found for ${FederalState} not found!`;
+                                        return
+                                    }
+
+                                })
+                                .catch(error => {
+                                    console.error('Error loading or parsing JSON file:', error);
+                                });
+
+                        })
+                        .catch(error => {
+                            console.error('Error loading or parsing JSON file:', error);
+                        });
+
+                })
+                .catch(error => {
+                    console.error('Error loading or parsing JSON file:', error);
+                });
+
+        }
+
+        // Function to search for PLZ by phone prefix
+        function searchPLZByPhonePrefix(vorwahl, jsonData) {
+            for (const entry of jsonData) {
+                if (entry.Vorwahl === vorwahl) {
+                    return entry.PLZ;
+                }
+            }
+            return "Phone prefix not found";
+        }
+
+        // Function to search for federal state name by PLZ
+        function searchFederalStateByPLZ(PLZ, jsonData) {
+            for (const entry of jsonData) {
+                if (entry.PLZ === PLZ) {
+                    return entry.Bundesland;
+                }
+            }
+            return "PLZ not found";
+        }
+        // Function to search for country code by federal state
+        function searchCountryCodeByFederalState(FederalState, jsonData) {
+            for (const entry of jsonData) {
+                if (entry.Bundesland === FederalState) {
+                    return entry.Länderkürzel;
+                }
+            }
+            return "Federal state not found";
+        }
+    </script>
+</body>
+
+</html>
