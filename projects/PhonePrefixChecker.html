@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Arcade Box</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            background-image: url('images/PhonePrefixChecker.png');
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        nav a:hover {
+            background-color: #666;
+        }
+
+        .project-container {
+            max-width: 800px;
+            margin: 20px auto 80px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: auto; /* Add overflow handling */
+        }
+
+        .project-container h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .project-container img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .project-container p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .project-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .project-links a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .project-links a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Phone Prefix Checker</h1>
+    <p>Checks from which state the prefix is...</p>
+</header>
+
+<nav>
+    <a href="../index.html">Home</a>
+    <a href="../projects.html">Projects</a>
+    <a href="../about.html">About Me</a>
+    <!-- Add more navigation links as needed -->
+</nav>
+
+<div class="project-container">
+    <h2>Description:</h2>
+    <p>
+        Phone Prefix Checker is a web-based tool designed to help users determine geographic information associated with phone prefixes. With a clean and intuitive interface, users can input phone prefixes to retrieve corresponding postal codes (PLZ), federal state names (Bundesland), and country codes (Länderkürzel). Leveraging data from JSON files hosted on GitHub, this tool provides quick and accurate results to assist users in identifying the origin of phone numbers.
+    </p>
+
+    <h2>Features:</h2>
+    <ol>
+        <li>Prefix Input: Users can enter phone prefixes into the designated input field.</li>
+        <li>Search Functionality: Upon entering a prefix and clicking the search button or pressing Enter, the tool retrieves associated geographic information.</li>
+        <li>Result Display: The retrieved information, including postal codes, federal state names, and country codes, is displayed below the input field.</li>
+        <li>Error Handling: In case of invalid prefixes or missing data, the tool provides informative error messages to guide users.</li>
+    </ol>
+
+    <h2>How to Use:</h2>
+    <ol>
+        <li>Enter the phone prefix you wish to look up into the input field.</li>
+        <li>Click the "Search" button or press Enter to initiate the search.</li>
+        <li>View the retrieved geographic information displayed below the input field.</li>
+    </ol>
+
+    <h2>Purpose:</h2>
+    <p>
+        Phone Prefix Checker aims to provide users with a convenient way to obtain geographic information associated with phone prefixes. Whether for personal or professional use, this tool assists individuals in identifying the geographical origin of phone numbers, contributing to better-informed communication practices.
+    </p>
+
+    <h2>Technologies Used:</h2>
+    <ul>
+        <li>HTML for structure and content</li>
+        <li>CSS for styling and layout</li>
+        <li>JavaScript for interactive functionality</li>
+        <li>Fetch API for data retrieval from JSON files</li>
+        <li>GitHub for hosting JSON data files</li>
+    </ul>
+
+    <h2>Future Enhancements:</h2>
+    <ol>
+        <li>Enhanced User Interface: Implement a more visually appealing and user-friendly interface to improve the overall user experience.</li>
+        <li>Additional Information: Expand the tool's capabilities to include more comprehensive geographic information associated with phone prefixes, such as city names or area codes.</li>
+        <li>Localization Support: Provide support for multiple languages and regions to cater to a broader audience.</li>
+        <li>Error Handling Improvements: Further refine error handling mechanisms to provide clearer guidance to users in case of invalid inputs or data retrieval failures.</li>
+    </ol>
+
+    <p>
+        Phone Prefix Checker empowers users with the ability to quickly and accurately identify the geographic origin of phone numbers, facilitating effective communication and decision-making processes.
+    </p>
+    
+    
+    <div class="project-links">
+        <a href="https://github.com/tmilka/Phone-prefix-checker">Visit Project</a>
+        <!-- hyperlink Github repsoitory-->
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Your Name</p>
+</footer>
+
+</body>
+</html>
