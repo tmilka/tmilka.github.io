@@ -4,6 +4,7 @@ body {
     padding: 0;
     background-color: #f5f5f5;
     background-image: url('projects/images/7068.jpg');
+    background-size: cover;
 }
 
 header {
