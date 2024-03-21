@@ -7,24 +7,69 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            text-align: center;
             margin: 0;
             padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        nav a:hover {
+            background-color: #666;
+        }
+
+
+        .feature-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Align items at the center horizontally */
+            padding: 50px 20px; /* Add padding to provide space around the sections */
+            margin-bottom: 50px;
         }
 
         .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
         }
 
-        h1 {
+        .feature-box {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px; /* Add margin to separate boxes */
+            width: 800px; /* Set a fixed width for all feature boxes */
+            max-width: 100%; /* Ensure boxes take full width of their container */
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Stack content vertically within the box */
+            justify-content: space-between; /* Space out content evenly within the box */
+        }
+
+
+        .feature-box h3 {
+            text-align: center; /* Center align the title */
+        }
+
+
+        .feature-box h2 {
             color: #333;
-            margin-top: 30px;
+            text-align: center; /* Center align the header */
         }
 
         label {
@@ -37,8 +82,7 @@
         }
 
         input[type="text"] {
-            width: 100%;
-            padding: 10px;
+            padding: 10px 20px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 3px;
@@ -65,15 +109,56 @@
             margin-top: 20px;
             font-weight: bold;
         }
+
+        /* Media query for smaller screen sizes */
+        @media (max-width: 800px) {
+            .feature-box {
+                width: 90%; /* Reduce width for smaller screens */
+            }
+        }
+
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+       
     </style>
 </head>
 
 <body>
-    <label for="userInput">Enter phone prefix:</label>
-    <input type="text" id="userInput" onkeydown="searchOnEnter(event)">
-    <button onclick="searchValue()">Search</button>
+    <header>
+        <h1>Phone Prefix Checker</h1>
+        <p>Check your phone prefixs</p>
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="about.html">About Me</a>
+        <!-- Add more navigation links as needed -->
+    </nav>
 
-    <p>Result: <span id="output"></span></p>
+    <section class="checker feature-section">
+        <div class="container">
+            <div class="feature-box">
+                <label for="userInput">Enter phone prefix:</label>
+                <input type="text" id="userInput" onkeydown="searchOnEnter(event)">
+                <button onclick="searchValue()">Search</button>
+
+                <p>Result: <span id="output"></span></p>
+            </div>
+            <!-- Add more feature boxes as needed -->
+        </div>
+    </section>
+
+  
 
     <script>
         // Enable to press "enter" to search
