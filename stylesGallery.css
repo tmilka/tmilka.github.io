@@ -11,8 +11,7 @@ body {
 }
 
 header {
-    /*background: url('Images/header1.mp4') no-repeat center center;*/
-    background-color: #333;
+    background: url('Images/gif1.gif') no-repeat center center;
     background-size: cover;
     color: white;
     text-align: center;
