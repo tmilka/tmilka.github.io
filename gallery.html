@@ -39,7 +39,7 @@
         // Function to fetch images and populate the gallery
         function loadImages() {
             console.log('Fetching images...');
-            fetch('images.json') // Fetch the JSON file
+            fetch('gallery_images/images.json') // Fetch the JSON file
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
