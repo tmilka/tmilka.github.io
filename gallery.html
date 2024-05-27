@@ -33,17 +33,21 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.5.0/lightgallery.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize lightGallery
-        lightGallery(document.getElementById('lightgallery'), {
-            selector: 'a'
-        });
+    (function() {
+        console.log('DOM fully loaded and parsed');
 
         // Function to fetch images and populate the gallery
         function loadImages() {
-            fetch('gallery_images/images.json') // Fetch the JSON file
-                .then(response => response.json())
+            console.log('Fetching images...');
+            fetch('images.json') // Fetch the JSON file
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(images => {
+                    console.log('Images fetched successfully:', images);
                     const gallery = document.getElementById('lightgallery');
                     images.forEach(image => {
                         const link = document.createElement('a');
@@ -54,13 +58,20 @@
                         link.appendChild(img);
                         gallery.appendChild(link);
                     });
+                    // Initialize lightGallery after images are loaded
+                    console.log('Initializing lightGallery...');
+                    lightGallery(gallery, {
+                        selector: 'a',
+                        download: false // Example customization
+                    });
+                    console.log('lightGallery initialized');
                 })
                 .catch(error => console.error('Error loading images:', error));
         }
 
         // Load images on page load
         loadImages();
-    });
+    })();
 </script>
 
 </body>
