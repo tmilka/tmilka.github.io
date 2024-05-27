@@ -41,7 +41,7 @@
 
         // Function to fetch images and populate the gallery
         function loadImages() {
-            fetch('images.json') // Fetch the JSON file
+            fetch('gallery_images/images.json') // Fetch the JSON file
                 .then(response => response.json())
                 .then(images => {
                     const gallery = document.getElementById('lightgallery');
