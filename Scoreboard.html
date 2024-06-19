@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scoreboard</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script defer src="scoreboard.js"></script>
+</head>
+<body>
+    <h1>Scoreboard</h1>
+    <div id="scoreboard">
+        <p>Tim: <span id="tim-score">0</span></p>
+        <p>Tobias: <span id="tobias-score">0</span></p>
+        <p>Sophie: <span id="sophie-score">0</span></p>
+    </div>
+    <button onclick="addWin('Tim')">Tim gewinnt</button>
+    <button onclick="addWin('Tobias')">Tobias gewinnt</button>
+    <button onclick="addWin('Sophie')">Sophie gewinnt</button>
+</body>
+</html>

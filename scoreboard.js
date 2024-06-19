@@ -1,0 +1,35 @@
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB8bzHGctc2pzPVdIuoQaWqS5qPDkf_tOs",
+    authDomain: "website-portofolio-c9053.firebaseapp.com",
+    projectId: "website-portofolio-c9053",
+    storageBucket: "website-portofolio-c9053.appspot.com",
+    messagingSenderId: "82609291871",
+    appId: "1:82609291871:web:03c0071dace6b9794ed1ea",
+    measurementId: "G-2XWBW2BV2S"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const analytics = getAnalytics(app);
+
+const players = ['Tim', 'Tobias', 'Sophie'];
+
+players.forEach(player => {
+    const scoreElement = document.getElementById(`${player.toLowerCase()}-score`);
+    const playerRef = database.ref('scores/' + player);
+
+    playerRef.on('value', (snapshot) => {
+        const score = snapshot.val() || 0;
+        scoreElement.innerText = score;
+    });
+});
+
+function addWin(player) {
+    const playerRef = database.ref('scores/' + player);
+    playerRef.transaction(currentScore => (currentScore || 0) + 1);
+}
