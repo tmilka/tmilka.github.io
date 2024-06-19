@@ -1,7 +1,3 @@
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
 const firebaseConfig = {
     apiKey: "AIzaSyB8bzHGctc2pzPVdIuoQaWqS5qPDkf_tOs",
     authDomain: "website-portofolio-c9053.firebaseapp.com",
@@ -15,7 +11,6 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-const analytics = getAnalytics(app);
 
 const players = ['Tim', 'Tobias', 'Sophie'];
 
