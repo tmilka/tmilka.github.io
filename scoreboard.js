@@ -8,6 +8,13 @@ const firebaseConfig = {
     measurementId: "G-2XWBW2BV2S"
 };
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM vollständig geladen und bereit.');
+    // Hier kannst du deine Initialisierungs- und Funktionsaufrufe platzieren
+    initializeFirebase();
+});
+
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
