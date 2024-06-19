@@ -11,13 +11,10 @@ const firebaseConfig = {
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM vollständig geladen und bereit.');
     // Hier kannst du deine Initialisierungs- und Funktionsaufrufe platzieren
-    initializeFirebase();
-});
-
-
-// Initialize Firebase
+    // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+});
 
 const players = ['Tim', 'Tobias', 'Sophie'];
 
