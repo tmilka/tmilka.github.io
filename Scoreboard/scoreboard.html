@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="scoreboard.css">
+</head>
+
+<body>
+
+    <div id="overview">
+        <h1>Overview</h1>
+        <button id="loadOverview">LOAD OVERVIEW</button>
+        <table id="overviewTable" border="1">
+            <thead>
+                <tr id="overviewHeader">
+                </tr>
+            </thead>
+            <tbody id="overviewBody">
+            </tbody>
+        </table>
+    </div>
+
+
+    <div id="addGame" class="container">
+        <h1>Add Game</h1>
+        <h4>Game Name</h4>
+        <input id="gameNameInput" type="text"> <br><br>
+        <button id="addGameBtn">ADD GAME</button>
+    </div>
+
+    <div id="deleteGame" class="container">
+        <h1>Delete Game</h1>
+        <h4>Game Name</h4>
+        <input id="deleteGameInput" type="text"> <br><br>
+        <button id="deleteGameBtn">DELETE GAME</button>
+
+    </div>
+
+    <div id="addPlayer" class="container">
+        <h1>Add Player</h1>
+        <h4>Name</h4>
+        <input id="playerNameInput" type="text"> <br><br>
+        <button id="add">ADD</button>
+    </div>
+
+    <div id="deletePlayer" class="container">
+        <h1>Delete Player</h1>
+        <h4>Name</h4>
+        <input id="deletePlayerInput" type="text"> <br><br>
+        <button id="deletePlayerBtn">DELETE PLAYER</button>
+    </div>
+
+    <div id="findDetails" class="container">
+        <h1>Find by Name</h1>
+        <h4>Name</h4>
+        <input id="findNameInput" type="text"> <br><br>
+        <button id="find">FIND</button>
+        <div id="displayStats"></div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEH0yycrbMsc8RK64NlBWKPeCXqdxhOjo",
+            authDomain: "website-60e8a.firebaseapp.com",
+            databaseURL: "https://website-60e8a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "website-60e8a",
+            storageBucket: "website-60e8a.appspot.com",
+            messagingSenderId: "972245003923",
+            appId: "1:972245003923:web:8ebaff5ada13982c2fe766"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import { getDatabase, get, set, update, ref, child, remove }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"
+
+        const db = getDatabase();
+
+        var findNameInput = document.querySelector("#findNameInput");
+        var findBtn = document.querySelector("#find");
+        var displayStats = document.querySelector("#displayStats");
+
+        var playerNameInput = document.querySelector("#playerNameInput");
+        var playerStatsInput = document.querySelector("#playerStatsInput");
+        var addBtn = document.querySelector("#add");
+
+        var deletePlayerInput = document.querySelector("#deletePlayerInput");
+        var deletePlayerBtn = document.querySelector("#deletePlayerBtn");
+
+        var loadOverviewBtn = document.querySelector("#loadOverview");
+        var overviewHeader = document.querySelector("#overviewHeader");
+        var overviewBody = document.querySelector("#overviewBody");
+
+        var gameNameInput = document.querySelector("#gameNameInput");
+        var initialScoreInput = document.querySelector("#initialScoreInput");
+        var addGameBtn = document.querySelector("#addGameBtn");
+
+        var deleteGameBtn = document.querySelector("#deleteGameBtn")
+
+        function FindData() {
+            const dbref = ref(db);
+
+            get(child(dbref, "Players/" + findNameInput.value))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        displayStats.innerHTML = "Stats for " + findNameInput.value + ":<br>" + JSON.stringify(data, null, 2);
+                    } else {
+                        alert("No data found");
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
+
+        function InsertPlayer() {
+            const playerName = playerNameInput.value.trim(); // Get player name from input and trim any leading/trailing whitespace
+
+            if (!playerName) {
+                alert("Please enter a player name");
+                return;
+            }
+
+            const defaultScore = 0; // Default score for new games
+
+            // Reference to the "Players" node in Firebase
+            const playersRef = ref(db, "Players");
+
+            // Fetch all players' data
+            get(playersRef)
+                .then((snapshot) => {
+                    const players = snapshot.val(); // Object containing all players and their games/scores
+
+                    if (!players) {
+                        // No existing players, initialize with empty games
+                        const playerData = {
+                            [playerName]: {} // Initialize new player with empty games
+                        };
+                        return set(playersRef, playerData); // Set the new player data in Firebase
+                    }
+
+                    // Extract all unique game names from existing players
+                    const gamesSet = new Set();
+                    Object.values(players).forEach((player) => {
+                        Object.keys(player).forEach((game) => {
+                            gamesSet.add(game);
+                        });
+                    });
+
+                    // Convert Set to array of games
+                    const gamesArray = Array.from(gamesSet);
+
+                    // Create default games object for new player
+                    const defaultGames = {};
+                    gamesArray.forEach((game) => {
+                        defaultGames[game] = defaultScore;
+                    });
+
+                    // Add new player with default games and scores
+                    const playerData = {
+                        [playerName]: defaultGames
+                    };
+
+                    // Update the database with the new player's data
+                    return update(playersRef, playerData);
+                })
+                .then(() => {
+                    LoadOverview();
+                    alert("Player added successfully");
+                })
+                .catch((error) => {
+                    alert("Error adding player: " + error.message);
+                });
+        }
+
+        function DeletePlayer() {
+            const playerName = deletePlayerInput.value.trim();
+
+            if (!playerName) {
+                alert("Please enter a player name to delete");
+                return;
+            }
+
+            const dbref = ref(db);
+
+            // Remove the player from the database
+            remove(ref(db, `Players/${playerName}`))
+                .then(() => {
+                    alert(`Player "${playerName}" deleted successfully`);
+                    // Optionally, you can clear the input field or perform any other actions
+                    deletePlayerInput.value = "";
+                    LoadOverview(); // Reload overview after deletion to reflect changes
+                })
+                .catch((error) => {
+                    alert(`Error deleting player: ${error.message}`);
+                });
+        }
+
+        function LoadOverview() {
+            const dbref = ref(db);
+
+            get(child(dbref, "Players"))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const playersData = snapshot.val();
+                        const players = Object.keys(playersData);
+                        const games = new Set();
+
+                        // Collect all game names
+                        players.forEach(player => {
+                            Object.keys(playersData[player]).forEach(game => {
+                                games.add(game);
+                            });
+                        });
+
+                        // Create table header
+                        overviewHeader.innerHTML = "<th>Game</th>";
+                        players.forEach(player => {
+                            overviewHeader.innerHTML += `<th>${player}</th>`;
+                        });
+
+                        // Create table body
+                        overviewBody.innerHTML = "";
+                        games.forEach(game => {
+                            let row = `<tr><td>${game}</td>`;
+                            players.forEach(player => {
+                                const score = playersData[player][game] || 0;
+                                row += `
+                                <td>
+                                    <button onclick="updateScore('${player}', '${game}', -1)">-</button>
+                                    ${score}
+                                    <button onclick="updateScore('${player}', '${game}', 1)">+</button>
+                                </td>`;
+                            });
+                            row += "</tr>";
+                            overviewBody.innerHTML += row;
+                        });
+                    } else {
+                        alert("No data found");
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
+
+        function updateScore(player, game, change) {
+            const dbref = ref(db);
+
+            get(child(dbref, `Players/${player}/${game}`))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const currentScore = snapshot.val();
+                        const newScore = currentScore + change;
+
+                        update(ref(db, `Players/${player}`), { [game]: newScore })
+                            .then(() => {
+                                LoadOverview(); // Reload the overview to reflect the updated scores
+                            })
+                            .catch((error) => {
+                                alert(error);
+                            });
+                    } else {
+                        // If the game does not exist, create it with the initial score change
+                        set(ref(db, `Players/${player}/${game}`), change)
+                            .then(() => {
+                                LoadOverview(); // Reload the overview to reflect the updated scores
+                            })
+                            .catch((error) => {
+                                alert(error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
+
+        function AddGame() {
+            const gameName = gameNameInput.value;
+            const initialScore = 0;
+
+            if (!gameName) {
+                alert("Game name cannot be empty");
+                return;
+            }
+
+            const dbref = ref(db);
+
+            get(child(dbref, "Players"))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const playersData = snapshot.val();
+                        const updates = {};
+
+                        Object.keys(playersData).forEach(player => {
+                            updates[`Players/${player}/${gameName}`] = initialScore;
+                        });
+
+                        update(dbref, updates)
+                            .then(() => {
+                                alert("Game added successfully");
+                                LoadOverview(); // Reload the overview to reflect the new game
+                            })
+                            .catch((error) => {
+                                alert(error);
+                            });
+                    } else {
+                        alert("No players found to add the game");
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
+
+        function DeleteGame() {
+            const gameName = deleteGameInput.value.trim();
+
+            if (!gameName) {
+                alert("Please enter a game name to delete");
+                return;
+            }
+
+            const dbref = ref(db, "Players");
+
+            get(dbref)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const playersData = snapshot.val();
+                        const updates = {};
+
+                        Object.keys(playersData).forEach(player => {
+                            // Check if the game exists before deleting
+                            if (playersData[player].hasOwnProperty(gameName)) {
+                                updates[`Players/${player}/${gameName}`] = null; // Set to null to delete the property
+                            }
+                        });
+
+                        update(ref(db), updates)
+                            .then(() => {
+                                LoadOverview(); // Reload the overview to reflect the new game
+                                alert("Game deleted successfully");
+
+                            })
+                            .catch((error) => {
+                                alert(`Error deleting game: ${error.message}`);
+                            });
+                    } else {
+                        alert("No players found to delete the game");
+                    }
+                })
+                .catch((error) => {
+                    alert(`Error fetching players data: ${error.message}`);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            LoadOverview(); // Call loadOverview() when the page is fully loaded
+        });
+
+
+        findBtn.addEventListener('click', FindData);
+        addBtn.addEventListener('click', InsertPlayer);
+        loadOverviewBtn.addEventListener('click', LoadOverview);
+        addGameBtn.addEventListener('click', AddGame);
+        deletePlayerBtn.addEventListener('click', DeletePlayer);
+        deleteGameBtn.addEventListener('click', DeleteGame)
+
+        // Make updateScore globally accessible for inline event handlers
+        window.updateScore = updateScore;
+    </script>
+
+</body>
+
+</html>
