@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scoreboard</title>
+    <!-- Firebase JavaScript SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <!-- Deine JavaScript-Datei -->
     <script defer src="scoreboard.js"></script>
 </head>
+
 <body>
     <h1>Scoreboard</h1>
     <div id="scoreboard">
@@ -16,5 +22,23 @@
     <button onclick="addWin('Tim')">Tim gewinnt</button>
     <button onclick="addWin('Tobias')">Tobias gewinnt</button>
     <button onclick="addWin('Sophie')">Sophie gewinnt</button>
+
+    <!-- Firebase-Konfiguration (ersetze die Platzhalter mit deinen eigenen Werten) -->
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyB8bzHGctc2pzPVdIuoQaWqS5qPDkf_tOs",
+            authDomain: "website-portofolio-c9053.firebaseapp.com",
+            projectId: "website-portofolio-c9053",
+            storageBucket: "website-portofolio-c9053.appspot.com",
+            messagingSenderId: "82609291871",
+            appId: "1:82609291871:web:03c0071dace6b9794ed1ea",
+            measurementId: "G-2XWBW2BV2S"
+        };
+
+        // Firebase initialisieren
+        firebase.initializeApp(firebaseConfig);
+    </script>
 </body>
+
 </html>

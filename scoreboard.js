@@ -1,3 +1,4 @@
+// Firebase-Konfiguration (wird hier erneut zur Sicherheit initialisiert)
 const firebaseConfig = {
     apiKey: "AIzaSyB8bzHGctc2pzPVdIuoQaWqS5qPDkf_tOs",
     authDomain: "website-portofolio-c9053.firebaseapp.com",
@@ -6,17 +7,19 @@ const firebaseConfig = {
     messagingSenderId: "82609291871",
     appId: "1:82609291871:web:03c0071dace6b9794ed1ea",
     measurementId: "G-2XWBW2BV2S"
-};
+  };
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM vollständig geladen und bereit.');
-    // Hier kannst du deine Initialisierungs- und Funktionsaufrufe platzieren
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+// Firebase initialisieren (nochmal zur Sicherheit)
+firebase.initializeApp(firebaseConfig);
 
-    const players = ['Tim', 'Tobias', 'Sophie'];
+// Firebase Realtime Database Referenz
+const database = firebase.database();
 
+// Spielerliste
+const players = ['Tim', 'Tobias', 'Sophie'];
+
+// Funktion zum Laden der Punktzahlen
+function loadScores() {
     players.forEach(player => {
         const scoreElement = document.getElementById(`${player.toLowerCase()}-score`);
         const playerRef = database.ref('scores/' + player);
@@ -26,11 +29,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             scoreElement.innerText = score;
         });
     });
+}
 
-    function addWin(player) {
-        const playerRef = database.ref('scores/' + player);
-        playerRef.transaction(currentScore => (currentScore || 0) + 1);
-    }
+// Funktion zum Hinzufügen eines Sieges für einen Spieler
+function addWin(player) {
+    const playerRef = database.ref('scores/' + player);
+    playerRef.transaction(currentScore => (currentScore || 0) + 1);
+}
 
+// DOM vollständig geladen und Firebase ist bereit
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM vollständig geladen und Firebase ist bereit.');
+    loadScores(); // Lade die Punktzahlen beim Laden der Seite
 });
-
