@@ -12,23 +12,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM vollständig geladen und bereit.');
     // Hier kannst du deine Initialisierungs- und Funktionsaufrufe platzieren
     // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-});
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-const players = ['Tim', 'Tobias', 'Sophie'];
+    const players = ['Tim', 'Tobias', 'Sophie'];
 
-players.forEach(player => {
-    const scoreElement = document.getElementById(`${player.toLowerCase()}-score`);
-    const playerRef = database.ref('scores/' + player);
+    players.forEach(player => {
+        const scoreElement = document.getElementById(`${player.toLowerCase()}-score`);
+        const playerRef = database.ref('scores/' + player);
 
-    playerRef.on('value', (snapshot) => {
-        const score = snapshot.val() || 0;
-        scoreElement.innerText = score;
+        playerRef.on('value', (snapshot) => {
+            const score = snapshot.val() || 0;
+            scoreElement.innerText = score;
+        });
     });
+
+    function addWin(player) {
+        const playerRef = database.ref('scores/' + player);
+        playerRef.transaction(currentScore => (currentScore || 0) + 1);
+    }
+
 });
 
-function addWin(player) {
-    const playerRef = database.ref('scores/' + player);
-    playerRef.transaction(currentScore => (currentScore || 0) + 1);
-}
